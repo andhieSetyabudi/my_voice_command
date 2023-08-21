@@ -2,11 +2,7 @@
 
 This is a simple project with **Speech Recognition Engine** runs on **PSoC 62**.
 
-For instructions on modifying and using this application template to create applications, follow steps from the "My first PSoC&trade; 6 MCU design using ModusToolbox&trade;" section in [AN228571](https://www.infineon.com/an228571) – Getting started with PSoC&trade; 6 MCU on ModusToolbox&trade; software or the "My first XMC7000 MCU design using Eclipse IDE for ModusToolbox&trade;" section in [AN234334](https://www.infineon.com/dgdl/Infineon-AN234334_Getting_started_with_XMC7000_MCU_on_ModusToolbox_software-ApplicationNotes-v01_00-EN.pdf?fileId=8ac78c8c8412f8d301842d32c5765bfd) – Getting started with XMC7000 MCU on ModusToolbox&trade; software.
-
-[View this README on GitHub.](https://github.com/Infineon/mtb-example-empty-app)
-
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMjg3NDIiLCJTcGVjIE51bWJlciI6IjAwMi0yODc0MiIsIkRvYyBUaXRsZSI6IkVtcHR5IGFwcGxpY2F0aW9uIHRlbXBsYXRlIiwicmlkIjoia2hhdHJpbmF2aW5rIiwiRG9jIHZlcnNpb24iOiI0LjMuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiUFNPQyJ9)
+Please see the demo [video](https://www.youtube.com/watch?v=XMjvxCSio90)
 
 ## Requirements
 
@@ -19,4 +15,42 @@ For instructions on modifying and using this application template to create appl
 - retarget-io
 - cyberon-dspotter-lib-psoc6-cm4
 
+## Obtaining License File
+
+Go to [Cyberon DSpotter License for Infineon Platform](https://license.cyberon.tw/InfineonDSpotterLicense/InfineonDSpotterLicense.php) to obtain a license file for the Cyberon keyword detection engine. The chipset ID can be accessed by executing the demo package.
+
+![Cyberon DSpotter License](./pict/license_page.jpg)
+
+## Create Custom Model
+
+1. Go to [Cyberon DSMT Tool V2 Help](https://tool.cyberon.com.tw/DSMT_V2/index.php?lang=en) to learn DSpotter Modeling Tool(DSMT) interface, and download the application here.
+2. Log in DSMT with trial account below:
+   - Account: **infineon_trial@cyberon.com.tw**
+   - Password: 
+   - Keep password field blank.
+   
+   ![Cyberon DSpotter Modeling Tool](./pict/cyberon_license.png)
+   
+3. Note that the DSMT account will work only on the Windows PC.
+4. Create a project, add trigger word into Group 1, and add commands into Group 2 for two-stage recognition. After confirming all keywords, please go to the **Extra Output** box at the right bottom, check the **Command Text** to pack the model with files of command text, then click **Save Project**. The model bin file named **[project_name]_pack_withTxt.bin** will be generated under this project path.
+
+Find more details about DSMT in the following tutorial materials:
+- [DSMT Tutorial Slide](https://drive.google.com/file/d/1kWrJ7OXgHTF4YPft6WRHeVlXVCGiqTNx/view)
+- [DSMT Tutorial Video](https://www.youtube.com/playlist?list=PLTEknqO5GAbrDX5NMs-P6b9THWwamgVBo)
+
+## Import Custom Model
+
+Modify the  **cyberon_data.s** inside **data** folder
+
+```
+.pushsection command_data, "ax", %progbits
+.incbin "data/control_myHome_pack_WithTxt.bin"
+.popsection
+
+.pushsection license_data, "ax", %progbits
+.incbin "data/EFBF40110A97852C_License.bin"
+.popsection
+```
+Rename the **EFBF40110A97852C_License.bin** with your license file-name.
+Replace **control_myHome_pack_WithTxt.bin** in **data** directory with your custom model bin file using the same file name.
 
